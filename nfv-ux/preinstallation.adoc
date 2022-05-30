@@ -1,0 +1,95 @@
+= Preparing to install a cluster that uses SR-IOV or OVS-DPDK on OpenStack
+
+Before you install an OCP cluster that uses SR-IOV or OVS-DPDK on OpenStack, you must understand each technology's requirements and then perform preparatory tasks. 
+
+== Requirements
+
+=== Common requirements
+
+To use SR-IOV or OVS-DPDK with your deployment:
+
+* RHOSP compute nodes must use a flavor that supports huge pages.
+
+* For each OCP node that will have an attached SR-IOV NIC, your RHOSP cluster must have:
+
+   ** One instance from the RHOSP quota
+   ** One port attached to the machines subnet
+   **  One port for each SR-IOV Virtual Function
+   ** A flavor with at least 16 GB memory, 4 vCPUs, and 25 GB storage space
+
+=== SR-IOV
+
+* link:https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/16.2/html-single/network_functions_virtualization_planning_and_configuration_guide/index#assembly_sriov_parameters[Plan your RHOSP SR-IOV deployment].
+
+* NICs that you use must be link:https://docs.openshift.com/container-platform/4.10/networking/hardware_networks/about-sriov.html[supported by OCP].
+
+* SR-IOV deployments often employ performance optimizations, such as dedicated or isolated CPUs. For maximum performance, configure your underlying RHOSP deployment to use these optimizations, and then run OpenShift Container Platform compute machines on the optimized infrastructure.
+** For more information about configuring performant RHOSP compute nodes, see link:https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/16.1/html-single/configuring_the_compute_service_for_instance_creation/configuring-compute-nodes-for-performance#configuring-compute-nodes-for-performance[Configuring Compute nodes for performance].
+
+=== OVS-DPDK
+
+* Plan your RHOSP OVS-DPDK deployment by referring to link:https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/16.2/html/network_functions_virtualization_planning_and_configuration_guide/assembly_ovsdpdk_parameters[Planning your OVS-DPDK deployment] in the Network Functions Virtualization Planning and Configuration Guide.
+
+* Configure your RHOSP OVS-DPDK deployment according to link:https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/16.2/html/network_functions_virtualization_planning_and_configuration_guide/part-dpdk-configure[Configuring an OVS-DPDK deployment] in the Network Functions Virtualization Planning and Configuration Guide.
+
+
+== Preparing to install the cluster
+
+=== Common procedures
+
+// n/a?
+
+=== SR-IOV
+
+* Create SR-IOV networks on RHOSP. (link:https://docs.openshift.com/container-platform/4.10/installing/installing_openstack/installing-openstack-installer-sr-iov.html#installation-osp-configuring-sr-iov_installing-openstack-installer-sr-iov["Creating SR-IOV networks for compute machines"])
+
+=== OVS-DPDK
+
+* Complete link:https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/16.2/html/network_functions_virtualization_planning_and_configuration_guide/part-dpdk-configure#p-ovs-dpdk-flavor-deploy-instance[Creating a flavor and deploying an instance for OVS-DPDK] before you install a cluster on RHOSP.
+
+// ** If some of your RHOSP compute nodes are not configured for OVS-DPDK, create an aggregate group for OVS-DPDK-compatible nodes and add them to it. For example:
+// +
+// [source,terminal]
+// ----
+// $ openstack aggregate create dpdk_group
+// $ openstack aggregate add host dpdk_group <compute_hosts>
+// $ openstack aggregate set --property dpdk=true dpdk_group
+// $ openstack flavor set <compatible_flavor> --property aggregate_instance_extra_specs:dpdk=true
+// ----
+
+// ** Create an additional network to attach poll mode driver interfaces to. For example:
+// +
+// [source,terminal]
+// ----
+// $ openstack network create dpdk_network --provider-physical-network dpdk-phy1 --provider-network-type vlan --provider-segment <VLAN_ID>
+// $ openstack subnet create dpdk_subnet --network dpdk_network --subnet-range 192.0.2.0/24 --dhcp
+// ----
+// +
+// where:
+// +
+// VLAN_ID:: is the VLAN ID that is later used by the cluster to select ports to attach poll mode drivers to.
+
+
+// Aren't these two children essentially covered by 8.8 in the previous link?
+
+
+
+== Next steps
+
+* Install your cluster
+
+* Perform common post-installation configuration tasks for clusters that use NFV technology, including:
+
+   ** Install the Performance Addon Operator.
+
+   ** Configure the Performance Addon Operator with huge pages support.
+
+* Perform post-installation configuration for SR-IOV, including:
+
+   ** Install the SR-IOV Operator.
+
+   ** Configure your SR-IOV network device.
+
+   ** Add an SR-IOV compute machine set.
+
+// * Perform post-installation configuration for OVS-DPDK, including: 
