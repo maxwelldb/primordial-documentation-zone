@@ -10,18 +10,18 @@ To use SR-IOV or OVS-DPDK with your deployment:
 
 * RHOSP compute nodes must use a flavor that supports huge pages.
 
+=== SR-IOV
+
+* link:https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/16.2/html-single/network_functions_virtualization_planning_and_configuration_guide/index#assembly_sriov_parameters[Plan your RHOSP SR-IOV deployment].
+
+* NICs that you use must be link:https://docs.openshift.com/container-platform/4.10/networking/hardware_networks/about-sriov.html[supported by OCP].
+
 * For each OCP node that will have an attached SR-IOV NIC, your RHOSP cluster must have:
 
    ** One instance from the RHOSP quota
    ** One port attached to the machines subnet
    **  One port for each SR-IOV Virtual Function
    ** A flavor with at least 16 GB memory, 4 vCPUs, and 25 GB storage space
-
-=== SR-IOV
-
-* link:https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/16.2/html-single/network_functions_virtualization_planning_and_configuration_guide/index#assembly_sriov_parameters[Plan your RHOSP SR-IOV deployment].
-
-* NICs that you use must be link:https://docs.openshift.com/container-platform/4.10/networking/hardware_networks/about-sriov.html[supported by OCP].
 
 * SR-IOV deployments often employ performance optimizations, such as dedicated or isolated CPUs. For maximum performance, configure your underlying RHOSP deployment to use these optimizations, and then run OpenShift Container Platform compute machines on the optimized infrastructure.
 ** For more information about configuring performant RHOSP compute nodes, see link:https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/16.1/html-single/configuring_the_compute_service_for_instance_creation/configuring-compute-nodes-for-performance#configuring-compute-nodes-for-performance[Configuring Compute nodes for performance].
