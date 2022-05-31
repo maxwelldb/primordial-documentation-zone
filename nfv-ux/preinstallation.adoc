@@ -41,10 +41,12 @@ To use SR-IOV or OVS-DPDK with your deployment:
 
 === SR-IOV
 
+// This module will be embedded in the pre-installation assembly.
 * Create SR-IOV networks on RHOSP. (link:https://docs.openshift.com/container-platform/4.10/installing/installing_openstack/installing-openstack-installer-sr-iov.html#installation-osp-configuring-sr-iov_installing-openstack-installer-sr-iov["Creating SR-IOV networks for compute machines"])
 
 === OVS-DPDK
 
+// This module will not.
 * Complete link:https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/16.2/html/network_functions_virtualization_planning_and_configuration_guide/part-dpdk-configure#p-ovs-dpdk-flavor-deploy-instance[Creating a flavor and deploying an instance for OVS-DPDK] before you install a cluster on RHOSP.
 
 // ** If some of your RHOSP compute nodes are not configured for OVS-DPDK, create an aggregate group for OVS-DPDK-compatible nodes and add them to it. For example:
