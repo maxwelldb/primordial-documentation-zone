@@ -1,0 +1,34 @@
+= Using SR-IOV compute machines with a cluster that runs on OpenStack
+
+You can configure your cluster to use SR-IOV. 
+
+== Prerequisites
+
+* You configured your OpenStack deployment according to the OCP guidelines for SR-IOV.
+* You installed an OCP cluster.
+* You Installed the Performance Addon Operator.
+* You configured the Performance Addon Operator with huge pages support.
+* You installed the SR-IOV Operator.
+* You configured the SR-IOV Operator.
+* You configured your SR-IOV network device.
+// Documentation for all of these bullets exists. 
+
+== Create networks...
+
+https://docs.openshift.com/container-platform/4.10/installing/installing_openstack/installing-openstack-installer-sr-iov.html#installation-osp-configuring-sr-iov_installing-openstack-installer-sr-iov
+
+Are there OSP docs we can link to for this instead, or is what we're asking entirely specific to OCP?
+
+
+== Create machines...
+
+https://docs.openshift.com/container-platform/4.10/machine_management/creating_machinesets/creating-machineset-osp.html#machineset-yaml-osp-sr-iov_creating-machineset-osp
+
+
+== Add'l steps
+
+* Optional: Configure OVS hardware offloading for your cluster.
+// https://docs.openshift.com/container-platform/4.10/post_installation_configuration/network-configuration.html#nw-osp-enabling-ovs-offload_post-install-network-configuration
+// This module looks like it will see changes for the hardware offload epic.
+// Let's verify that https://docs.openshift.com/container-platform/4.10/networking/hardware_networks/configuring-hardware-offloading.html isn't sufficient.
+* Deploy a `testpmd` pod or a `testpmd` pod that uses OVS hardware offloading.

@@ -1,0 +1,59 @@
+= Using OVS-DPDK with a cluster that runs on OpenStack
+
+You can configure your cluster to use OVS-DPDK. 
+
+== Prerequisites
+
+* You configured your OpenStack deployment according to the OCP guidelines for OVS-DPDK.
+* You installed an OCP cluster.
+* 
+
+== Particular performance profile (optional)
+
+https://docs.openshift.com/container-platform/4.10/scalability_and_performance/cnf-performance-addon-operator-for-low-latency-nodes.html#about_hyperthreading_for_low_latency_and_real_time_applications_cnf-master
+
+To get the best performance out of the workers attached to the VFIO interface, the correct settings for hugepages and other relevant settings need to be used. The node-tuning-operator component is used to configure these settings on the desired worker nodes.
+
+The following is an example of the performance profile that should be applied. The user should provide the values for kernel args, HUGEPAGES, CPU_ISOLATED and CPU_RESERVED depending on their system:
+
+[source,yaml]
+----
+apiVersion: performance.openshift.io/v2
+kind: PerformanceProfile
+metadata:
+  name: cnf-performanceprofile
+spec:
+  additionalKernelArgs:
+    - nmi_watchdog=0
+    - audit=0
+    - mce=off
+    - processor.max_cstate=1
+    - idle=poll
+    - intel_idle.max_cstate=0
+    - default_hugepagesz=1GB
+    - hugepagesz=1G
+    - intel_iommu=on
+  cpu:
+    isolated: <CPU_ISOLATED>
+    reserved: <CPU_RESERVED>
+  hugepages:
+    defaultHugepagesSize: 1G
+    pages:
+      - count: <HUGEPAGES>
+        node: 0
+        size: 1G
+  nodeSelector:
+    node-role.kubernetes.io/worker: ''
+  realTimeKernel:
+    enabled: false
+----
+
+== Add'l steps
+
+* Optional: Configure OVS hardware offloading for your cluster.
+// https://docs.openshift.com/container-platform/4.10/post_installation_configuration/network-configuration.html#nw-osp-enabling-ovs-offload_post-install-network-configuration
+// This module looks like it will see changes for the hardware offload epic.
+// Let's verify that https://docs.openshift.com/container-platform/4.10/networking/hardware_networks/configuring-hardware-offloading.html isn't sufficient.
+* Deploy a `testpmd` pod or a `testpmd` pod that uses OVS hardware offloading.
+
+// https://doc.dpdk.org/guides/testpmd_app_ug/intro.html

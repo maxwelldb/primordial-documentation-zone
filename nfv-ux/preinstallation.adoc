@@ -74,7 +74,10 @@ To use SR-IOV or OVS-DPDK with your deployment:
 
 // Aren't these two children essentially covered by 8.8 in the previous link?
 
-
+[IMPORTANT]
+====
+Retrieve the UUID of the Neutron network whose ports the poll mode drivers will be attached to. You must add this UUID as a value of `compute.platform.openstack.additionalNetworkIDs` in the `install-config.yaml` file before you deploy your cluster.
+====
 
 == Next steps
 
@@ -86,12 +89,18 @@ To use SR-IOV or OVS-DPDK with your deployment:
 
    ** Configure the Performance Addon Operator with huge pages support.
 
-* Perform post-installation configuration for SR-IOV, including:
-
    ** Install the SR-IOV Operator.
 
    ** Configure your SR-IOV network device.
 
+* Perform post-installation configuration for SR-IOV, including:
+
    ** Add an SR-IOV compute machine set.
 
-// * Perform post-installation configuration for OVS-DPDK, including: 
+   ** Deploy a testpmd pod 
+
+   ** Deploy a `testpmd` pod that uses OVS hardware offloading.
+   
+* Perform post-installation configuration for OVS-DPDK, including: 
+
+   ** Deploy a testpmd pod
